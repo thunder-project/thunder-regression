@@ -67,7 +67,7 @@ class TuningModel(object):
         if not (isinstance(data, Series)):
             raise Exception('Input must be Series or a subclass (e.g. RowMatrix)')
 
-        return Series(data.rdd.mapValues(lambda x: self.get(x)), index=['center', 'spread']).__finalize__(data)
+        return Series(data.tordd().mapValues(lambda x: self.get(x)), index=['center', 'spread']).__finalize__(data)
 
 
 class CircularTuningModel(TuningModel):

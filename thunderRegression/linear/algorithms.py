@@ -84,8 +84,6 @@ class LinearRegressionAlgorithm(object):
             X = zscore.transform(X)
 
         estimator, transforms = self._prepare(X)
-        newrdd = y.rdd.mapValues(lambda v: LocalLinearRegressionModel().fit(estimator, v))
-
         if self._intercept:
             transforms.insert(AddConstant())
 
@@ -93,7 +91,9 @@ class LinearRegressionAlgorithm(object):
             transforms.insert(zscore)
         
         transformedX = transforms.apply(X)
-        stats = newrdd.zip(y.rdd.values()).map(lambda (v1, v2): (v1[0], v1[1].stats(transformedX, v2)))
+
+        newrdd = y.tordd().mapValues(lambda v: LocalLinearRegressionModel().fit(estimator, v))
+        stats = newrdd.zip(y.tordd().values()).map(lambda (v1, v2): (v1[0], v1[1].stats(transformedX, v2)))
 
         return RegressionModel(newrdd, transforms, stats, self.__class__.__name__)
 
