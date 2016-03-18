@@ -30,7 +30,7 @@ Or define your own algorithm
 ```python
 from regression import CusomRegression
 from sklearn.linear_model import LassoCV
-algorithm = CusomRegression(LassoCV(normalize=True))
+algorithm = CusomRegression(LassoCV(normalize=True, fit_intercept=False))
 ```
 
 Fit to the data and collect the coefficients for each fit
