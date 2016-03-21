@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from .model import MassRegressionModel
 from .utils import toseries
 
@@ -37,7 +39,7 @@ class MassRegressionAlgorithm:
         y = toseries(y)
         alg = self.alg
 
-        return MassRegressionModel(y.map(lambda v: alg.fit(X, v), index=(0,)))
+        return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v)))
 
     def fit_with_score(self, X, y):
         """
