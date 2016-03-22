@@ -12,7 +12,7 @@ pytestmark = pytest.mark.usefixtures("eng")
 
 def fit_models(model, X, y, **kwargs):
 	fit = [model(**kwargs).fit(X, v) for v in y.toarray()]
-	return map(lambda m: r_[m.intercept_, m.coef_], fit)
+	return list(map(lambda m: r_[m.intercept_, m.coef_], fit))
 
 def score_models(model, X, y, **kwargs):
 	return [model(**kwargs).fit(X, v).score(X, v) for v in y.toarray()]
