@@ -14,11 +14,14 @@ def fit_models(model, X, y, **kwargs):
 	fit = [model(**kwargs).fit(X, v) for v in y.toarray()]
 	return list(map(lambda m: r_[m.intercept_, m.coef_], fit))
 
+
 def score_models(model, X, y, **kwargs):
 	return [model(**kwargs).fit(X, v).score(X, v) for v in y.toarray()]
 
+
 def predict_models(model, X, y, **kwargs):
 	return [model(**kwargs).fit(X, v).predict(X) for v in y.toarray()]
+
 
 def test_linear(eng):
 	X = randn(10, 2)
@@ -31,6 +34,7 @@ def test_linear(eng):
 	truth = asarray(fit_models(LR, X, y, fit_intercept=True))
 	betas = LinearRegression(fit_intercept=True).fit(X, y).betas.toarray()
 	assert allclose(truth, betas)
+
 
 def test_custom(eng):
 	X = randn(10, 2)
@@ -45,6 +49,7 @@ def test_custom(eng):
 	betas = CustomRegression(Ridge(**kwargs)).fit(X, y).betas.toarray()
 	assert allclose(truth, betas)
 
+
 def test_score(eng):
 	X = randn(10, 2)
 	y = fromarray(randn(10, 4).T, engine=eng)
@@ -52,6 +57,7 @@ def test_score(eng):
 	truth = asarray(score_models(LR, X, y))
 	scores = LinearRegression().fit(X, y).score(X, y).toarray()
 	assert allclose(truth, scores)
+
 
 def test_predict(eng):
 	X = randn(10, 2)
