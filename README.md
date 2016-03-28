@@ -1,6 +1,6 @@
 # thunder-regression
 
-Algorithms and data structures for mass univariate regression: independently regressing a single set of explantory variables against multiple response variables. Includes a collection of `algorithms` for different types of regression, and also includes support for custom algorithms, all following the `scikit-learn` style. The `algorithms` are `fit` to data, returning a fitted `model` that contains regression coefficients and allows for `predicting` and `scoring` on new data. Compatible with Python 2.7+ and 3.4+. Works well alongside `thunder` and supprts parallelization via Spark, but can be used as a standalone module on local arrays.
+Algorithms and data structures for mass univariate regression. Mass regression is defined as independently regressing multiple response targets against a single set of explantory features. This module includes a collection of `algorithms` for performing different types of mass regression, all following the `scikit-learn` style, and also supports providing custom algorithms directly from `scikit-learn`. The `algorithms` are `fit` to data, returning a fitted `model` that contains regression coefficients and allows for `predicting` and `scoring` on new data. Compatible with Python 2.7+ and 3.4+. Works well alongside `thunder` and supprts parallelization via Spark, but can also be used as a standalone module on local arrays.
 
 ## installation
 
@@ -46,6 +46,8 @@ model = algorithm.fit(X, y)
 Where `X` is an array of `samples x features` and `y` is an array of `targets x samples`.
 
 ## model
+
+[ FILL IN ]
 
 ## algorithms
 
