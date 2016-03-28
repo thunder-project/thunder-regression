@@ -69,22 +69,20 @@ Fit the algorithm to data and also compute scores for the goodness of fits (r-sq
 
 ## model
 
-The result of fitting an `algorithm` is a model with the following properties.
+The result of fitting an `algorithm` is a model with the following properties and methods.
 
 #### `model.betas`
-- array of regression coefficients, dimensions `targets x features`. If an intercept was fit, it will be the 
+Array of regression coefficients, dimensions `targets x features`. If an intercept was fit, it will be the 
 the first feature.
 
 #### `model.models`
-- array of fitted models, dimensions `1 x targets`.
+Array of fitted models, dimensions `1 x targets`.
 
-#### `model.coef\_`
-- array of coefficients, not including a possible intercept term, for consistency with scikit-learn interface.
+#### `model.coef_`
+Array of coefficients, not including a possible intercept term, for consistency with scikit-learn interface.
 
-#### `model.intercept\_`
-- array of intercepts, for consistency with scikit-learn. If no intercepts fit, all will have values `0.0`.
-
-And the following methods:
+#### `model.intercept_`
+Array of intercepts, for consistency with scikit-learn. If no intercepts fit, all will have values `0.0`.
 
 #### `model.predict(X)`
 Predicts the response to new inputs.
@@ -97,7 +95,7 @@ Computes the goodness of fit (r-squared, unless otherwise stated) of the model f
 - `y` collection of responses, dimensions `targets x samples`
 - returns an array of scores
 
-#### `model.predict\_and\_score(X, y)`
+#### `model.predict_and_score(X, y)`
 Simultaneously computes the results of `predict(X)` and `score(X, y)`
 - `X` design matrix, dimensions `samples x features`
 - `y` collection of responses, dimensions `targets x samples`
@@ -107,9 +105,9 @@ Simultaneously computes the results of `predict(X)` and `score(X, y)`
 
 Here are all the algorithms currently available.
 
-#### `LinearRegression(fit\_intercept=False, normalize=False)`
+#### `LinearRegression(fit_intercept=False, normalize=False)`
 Linear regression through ordinary least squares as implemented in scikit-learn's `LinearRegression` algorithm.
-- `fit\_intercept` whether or not to fit intercept terms
+- `fit_intercept` whether or not to fit intercept terms
 - `normalize` whether or not to normalize the data before fitting the models
 
 #### `CustomRegression(algorithm)`
@@ -117,8 +115,8 @@ Use a custom single-series regression algorithm in a mass regression analysis.
 - `algorithm` a single-series regression algorithm. Must conform to the `scikit-learn` API in the following ways:
     1. Must implement a `.fit(X, y)` method that takes a design matrix (`samples x features`) and a response
        vector and returns an object representing the fitted model.
-    2. The returned fitted model must must have attributes `.coef\_` and `.intercept\_` that hold the results of the
-       the fit (`.coef\_` having dimensions `1 x features` and `.intercept\_` being a scalar).
+    2. The returned fitted model must must have attributes `.coef_` and `.intercept_` that hold the results of the
+       the fit (`.coef_` having dimensions `1 x features` and `.intercept_` being a scalar).
     3. The returned fitted model must also have methods `.predict(X)` and `.score(X, y)` (`X` having dimensions
        `new samples x features` and `y` having dimensions `1 x new samples`). The former should return a vector of
        predictions (dimensions `1 x new samples`) and the former should return a scalar score (likely r-squared).
