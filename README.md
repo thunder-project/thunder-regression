@@ -45,17 +45,39 @@ model = algorithm.fit(X, y)
 
 Where `X` is an array of `samples x features` and `y` is an array of `targets x samples`.
 
+## algorithm
+
+All algorithms have the following methods
+
+#### `algorithm.fit(X, y)`
+
+#### `algorithm.fit_and_score(X, y)`
+
 ## model
 
+The result of fitting an `algorithm` is a model with the following properties.
+
+#### `model.betas`
+
+#### `model.models`
+
+And the following methods
+
+#### `model.predict(X)`
+
+#### `model.score(X, y)`
+
+#### `model.predict_and_score(X, y)`
+
+## list of algorithms
+
+Here are all the algorithms currently available.
+
+#### `LinearRegression(fit_intercept=False, normalize=False).fit(X, y)`
+
 [ FILL IN ]
 
-## algorithms
-
-##### `LinearRegression(fit_intercept=False, normalize=False).fit(X, y)`
-
-[ FILL IN ]
-
-##### `CustomRegression(Algorithm).fit(X, y)`
+#### `CustomRegression(Algorithm).fit(X, y)`
 
 You can define an algorithm in `scikit-learn` and then wrap it directly, for example
 
