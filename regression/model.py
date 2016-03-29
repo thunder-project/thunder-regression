@@ -54,7 +54,7 @@ class MassRegressionModel:
             return r_[model.score(X, y), model.predict(X)]
 
         if y.mode == "spark":
-            if not self.model.mode == "spark":
+            if not self.models.mode == "spark":
                 raise ValueError("model is spark mode, input y must also be spark mode")
             joined = self.models.tordd().join(y.tordd())
             both = fromrdd(joined.mapValues(lambda v: get_both(v[0][0], X, v[1])))
