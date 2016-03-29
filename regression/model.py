@@ -45,3 +45,26 @@ class MassRegressionModel:
             if not self.models.mode == "local":
                 raise ValueError("mode is local mode, input y must also be local mode")
             return self.models.map(lambda kv: kv[1][0].score(X, y.values[kv[0]]), with_keys=True)
+
+    def predict_and_score(self, X, y):
+
+        y = toseries(y)
+
+        def get_both(model, X, y):
+            return r_[model.score(X, y), model.predict(X)]
+
+        if y.mode == "spark":
+            if not self.model.mode == "spark":
+                raise ValueError("model is spark mode, input y must also be spark mode")
+            joined = self.models.tordd().join(y.tordd())
+            both = fromrdd(joined.mapValues(lambda v: get_both(v[0][0], X, v[1])))
+
+
+        if y.mode == "local":
+            if not self.models.mode == "local":
+                raise ValueError("mode is local mode, input y must also be local mode")
+            both = self.models.map(lambda kv: get_both(kv[1][0], X, y.values[kv[0]]), with_keys=True)
+
+        predictions = both[:, 1:]
+        scores = both[:, [0]]
+        return predictions, scores

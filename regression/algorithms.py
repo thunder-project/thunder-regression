@@ -41,7 +41,7 @@ class MassRegressionAlgorithm:
 
         return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v)))
 
-    def fit_with_score(self, X, y):
+    def fit_and_score(self, X, y):
         """
         Fit a mass univariate regression model and return the scores as well
 
@@ -65,12 +65,12 @@ class MassRegressionAlgorithm:
         alg = self.alg
 
         def getboth(v):
-            fitted = alg.fit(X, v)
+            fitted = deepcopy(alg).fit(X, v)
             score = fitted.score(X, v)
             return [score, fitted]
 
         both = y.map(getboth)
-        return both.map(lambda v: v[0]), both.map(lambda v: v[1])
+        return MassRegressionModel(both.map(lambda v: v[1])), both.map(lambda v: v[0])
 
 class LinearRegression(MassRegressionAlgorithm):
     """
