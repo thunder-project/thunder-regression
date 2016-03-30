@@ -40,7 +40,7 @@ from regression import LinearRegression
 algorithm = LinearRegression(fit_intercept=False)
 ```
 
-Fit the algorithm to data in the form of a `samples x features` design `X` and a `targets x samples` response matrix `y`.
+Fit the algorithm to data in the form of a `samples x features` design matrix `X` and a `targets x samples` response matrix `y`.
 
 ```python
 model = algorithm.fit(X, y)
