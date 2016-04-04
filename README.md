@@ -130,3 +130,16 @@ from sklearn.linear_model import LassoCV
 algorithm = CusomRegression(LassoCV(normalize=True, fit_intercept=False))
 model = algorithm.fit(X, Y)
 ```
+## tests
+
+Run tests with 
+
+```
+py.test
+```
+
+Tests run locally with [`numpy`](https://github.com/numpy/numpy) by default, but the same tests can be run against a local [`spark`](https://github.com/apache/spark) installation using
+
+```
+py.test --engine=spark
+```
