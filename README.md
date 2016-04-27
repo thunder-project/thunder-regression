@@ -134,12 +134,12 @@ model = algorithm.fit(X, Y)
 
 Run tests with 
 
-```
+```bash
 py.test
 ```
 
 Tests run locally with [`numpy`](https://github.com/numpy/numpy) by default, but the same tests can be run against a local [`spark`](https://github.com/apache/spark) installation using
 
-```
+```bash
 py.test --engine=spark
 ```
