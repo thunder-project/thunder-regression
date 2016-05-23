@@ -1,5 +1,9 @@
 # thunder-regression
 
+[![Latest Version](https://img.shields.io/pypi/v/thunder-regression.svg?style=flat-square)](https://pypi.python.org/pypi/thunder-registration)
+[![Build Status](https://img.shields.io/travis/thunder-project/thunder-regression/master.svg?style=flat-square)](https://travis-ci.org/thunder-project/thunder-regression) 
+
+
 > algorithms for mass univariate regression 
 
 Mass univariate regression is the process of independently regressing multiple response variables against a single set of explantory features. It is common in any domain in which a lage number of response variables are measured, and fitting large collections of such models can benefit significantly from parallelization. 
