@@ -39,38 +39,17 @@ class MassRegressionAlgorithm:
         y = toseries(y)
         alg = self.alg
 
-        return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v)))
+        if hasattr(self.alg, 'prepare'):
+            Xnew = self.alg.prepare(X)
+        else:
+            Xnew = X
 
-    def fit_and_score(self, X, y):
-        """
-        Fit a mass univariate regression model and return the scores as well
+        def fit_and_score(v):
+            model = deepcopy(alg).fit(Xnew, v)
+            model.score_ = model.score(X, v)
+            return model
 
-        Parameters
-        ----------
-
-        X : ndarray, 2d
-            The design matrix, a two-dimensional ndarray. Each row is a unique
-            measurement and each column is different regressor / explanatory
-            variable.
-
-        y : array-like (thunder Series, BoltArray, or ndarray)
-            Collection of response variables. Can be a thunder Series object,
-            where each record is a different set of response variables or a
-            local (ndarray) or distributed (BoltArray) with the first dimension
-            indexing response varibles and the second dimension indexing data
-            points.
-        """
-
-        y = toseries(y)
-        alg = self.alg
-
-        def getboth(v):
-            fitted = deepcopy(alg).fit(X, v)
-            score = fitted.score(X, v)
-            return [score, fitted]
-
-        both = y.map(getboth)
-        return MassRegressionModel(both.map(lambda v: v[1])), both.map(lambda v: v[0])
+        return MassRegressionModel(y.map(fit_and_score, value_shape=(1,), dtype=object))
 
 class LinearRegression(MassRegressionAlgorithm):
     """
@@ -94,6 +73,12 @@ class LinearRegression(MassRegressionAlgorithm):
     def __init__(self, fit_intercept=True, normalize=False):
         from sklearn.linear_model import LinearRegression as LR
         self.alg = LR(fit_intercept=fit_intercept, normalize=normalize);
+
+class FastLinearRegression(MassRegressionAlgorithm):
+
+    def __init__(self, fit_intercept=True):
+        from .local import PseudoInvRegression
+        self.alg = PseudoInvRegression(fit_intercept)
 
 class CustomRegression(MassRegressionAlgorithm):
     """
