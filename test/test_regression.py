@@ -2,7 +2,7 @@ import pytest
 
 from sklearn.linear_model import LinearRegression as LR
 from sklearn.linear_model import Ridge
-from numpy import allclose, r_, asarray
+from numpy import allclose, r_, asarray, newaxis, hstack
 from numpy.random import randn
 
 from thunder.series import fromarray
@@ -62,18 +62,6 @@ def test_custom(eng):
 	betas = CustomRegression(Ridge(**kwargs)).fit(X, y).betas.toarray()
 	assert allclose(truth, betas)
 
-def test_fit_and_score(eng):
-	X = randn(10, 2)
-	y = fromarray(randn(10, 4).T, engine=eng)
-
-	betas1 = LinearRegression().fit(X, y).betas.toarray()
-	rsq1 = LinearRegression().fit(X, y).score(X, y).toarray()
-
-	model, rsq2 = LinearRegression().fit_and_score(X, y)
-	betas2, rsq2 = model.betas.toarray(), rsq2.toarray()
-
-	assert allclose(betas1, betas2)
-	assert allclose(rsq1, rsq2)
 
 def test_score(eng):
 	X = randn(10, 2)
@@ -84,6 +72,19 @@ def test_score(eng):
 	assert allclose(truth, scores)
 
 
+def test_betas_and_scores(eng):
+	X = randn(10, 2)
+	y = fromarray(randn(10, 4).T, engine=eng)
+
+	true_betas = asarray(fit_models(LR, X, y))
+	true_scores = asarray(score_models(LR, X, y))
+	truth = hstack([true_betas, true_scores[:, newaxis]])
+
+	result = LinearRegression().fit(X, y).betas_and_scores.toarray()
+
+	assert allclose(truth, result)
+
+
 def test_predict(eng):
 	X = randn(10, 2)
 	y = fromarray(randn(10, 4).T, engine=eng)
@@ -92,17 +93,17 @@ def test_predict(eng):
 	predictions = LinearRegression().fit(X, y).predict(X).toarray()
 	assert allclose(truth, predictions)
 
+
 def test_predict_and_score(eng):
 	X = randn(10, 2)
 	y = fromarray(randn(10, 4).T, engine=eng)
 
 	model = LinearRegression().fit(X, y)
 
-	yhat1 = model.predict(X).toarray()
-	rsq1 = model.score(X, y).toarray()
+	yhat = model.predict(X).toarray()
+	rsq = model.score(X, y).toarray()
+	truth = hstack([yhat, rsq[:, newaxis]])
 
-	yhat2, rsq2 = model.predict_and_score(X, y)
-	yhat2, rsq2 = yhat2.toarray(), rsq2.toarray()
+	result = model.predict_and_score(X, y).toarray()
 
-	assert allclose(yhat1, yhat2)
-	assert allclose(rsq1, rsq2)
+	assert allclose(truth, result)

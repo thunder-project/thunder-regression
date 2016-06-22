@@ -27,6 +27,12 @@ class MassRegressionModel:
             return r_[model.intercept_, model.coef_]
         return self.models.map(lambda v: getbetas(v[0]))
 
+    @property
+    def betas_and_scores(self):
+        def getvalues(model):
+            return r_[model.intercept_, model.coef_, model.score_]
+        return self.models.map(lambda v: getvalues(v[0]))
+
     def predict(self, X):
         return self.models.map(lambda v: v[0].predict(X))
 
@@ -51,7 +57,7 @@ class MassRegressionModel:
         y = toseries(y)
 
         def get_both(model, X, y):
-            return r_[model.score(X, y), model.predict(X)]
+            return r_[model.predict(X), model.score(X, y)]
 
         if y.mode == "spark":
             if not self.models.mode == "spark":
@@ -65,6 +71,4 @@ class MassRegressionModel:
                 raise ValueError("mode is local mode, input y must also be local mode")
             both = self.models.map(lambda kv: get_both(kv[1][0], X, y.values[kv[0]]), with_keys=True)
 
-        predictions = both[:, 1:]
-        scores = both[:, [0]]
-        return predictions, scores
+        return both 

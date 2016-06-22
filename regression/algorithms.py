@@ -40,49 +40,16 @@ class MassRegressionAlgorithm:
         alg = self.alg
 
         if hasattr(self.alg, 'prepare'):
-            X = self.alg.prepare(X)
-
-        return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v),
-                value_shape=(1,), dtype=object))
-
-    def fit_and_score(self, X, y):
-        """
-        Fit a mass univariate regression model and return the scores as well
-
-        Parameters
-        ----------
-
-        X : ndarray, 2d
-            The design matrix, a two-dimensional ndarray. Each row is a unique
-            measurement and each column is different regressor / explanatory
-            variable.
-
-        y : array-like (thunder Series, BoltArray, or ndarray)
-            Collection of response variables. Can be a thunder Series object,
-            where each record is a different set of response variables or a
-            local (ndarray) or distributed (BoltArray) with the first dimension
-            indexing response varibles and the second dimension indexing data
-            points.
-        """
-
-        y = toseries(y)
-        alg = self.alg
-
-        if hasattr(self.alg, 'prepare'):
             Xnew = self.alg.prepare(X)
         else:
             Xnew = X
 
-        def getboth(v):
-            fitted = deepcopy(alg).fit(Xnew, v)
-            score = fitted.score(X, v)
-            return [score, fitted]
+        def fit_and_score(v):
+            model = deepcopy(alg).fit(Xnew, v)
+            model.score_ = model.score(X, v)
+            return model
 
-
-        both = y.map(getboth)
-        models = MassRegressionModel(both.map(lambda v: v[1], value_shape=(1,), dtype=object))
-        scores = both.map(lambda v: v[0], value_shape=(1,), dtype=object)
-        return models, scores
+        return MassRegressionModel(y.map(fit_and_score, value_shape=(1,), dtype=object))
 
 class LinearRegression(MassRegressionAlgorithm):
     """
