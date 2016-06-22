@@ -39,7 +39,11 @@ class MassRegressionAlgorithm:
         y = toseries(y)
         alg = self.alg
 
-        return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v)))
+        if hasattr(self.alg, 'prepare'):
+            X = self.alg.prepare(X)
+
+        return MassRegressionModel(y.map(lambda v: deepcopy(alg).fit(X, v),
+                value_shape=(1,), dtype=object))
 
     def fit_and_score(self, X, y):
         """
@@ -64,13 +68,21 @@ class MassRegressionAlgorithm:
         y = toseries(y)
         alg = self.alg
 
+        if hasattr(self.alg, 'prepare'):
+            Xnew = self.alg.prepare(X)
+        else:
+            Xnew = X
+
         def getboth(v):
-            fitted = deepcopy(alg).fit(X, v)
+            fitted = deepcopy(alg).fit(Xnew, v)
             score = fitted.score(X, v)
             return [score, fitted]
 
+
         both = y.map(getboth)
-        return MassRegressionModel(both.map(lambda v: v[1])), both.map(lambda v: v[0])
+        models = MassRegressionModel(both.map(lambda v: v[1], value_shape=(1,), dtype=object))
+        scores = both.map(lambda v: v[0], value_shape=(1,), dtype=object)
+        return models, scores
 
 class LinearRegression(MassRegressionAlgorithm):
     """
@@ -94,6 +106,12 @@ class LinearRegression(MassRegressionAlgorithm):
     def __init__(self, fit_intercept=True, normalize=False):
         from sklearn.linear_model import LinearRegression as LR
         self.alg = LR(fit_intercept=fit_intercept, normalize=normalize);
+
+class FastLinearRegression(MassRegressionAlgorithm):
+
+    def __init__(self, fit_intercept=True):
+        from .local import PseudoInvRegression
+        self.alg = PseudoInvRegression(fit_intercept)
 
 class CustomRegression(MassRegressionAlgorithm):
     """

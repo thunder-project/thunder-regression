@@ -6,7 +6,7 @@ from numpy import allclose, r_, asarray
 from numpy.random import randn
 
 from thunder.series import fromarray
-from regression import LinearRegression, CustomRegression
+from regression import LinearRegression, FastLinearRegression, CustomRegression
 
 pytestmark = pytest.mark.usefixtures("eng")
 
@@ -31,8 +31,21 @@ def test_linear(eng):
 	betas = LinearRegression().fit(X, y).betas.toarray()
 	assert allclose(truth, betas)
 
-	truth = asarray(fit_models(LR, X, y, fit_intercept=True))
-	betas = LinearRegression(fit_intercept=True).fit(X, y).betas.toarray()
+	truth = asarray(fit_models(LR, X, y, fit_intercept=False))
+	betas = LinearRegression(fit_intercept=False).fit(X, y).betas.toarray()
+	assert allclose(truth, betas)
+
+
+def test_fast_linear(eng):
+	X = randn(10, 2)
+	y = fromarray(randn(10, 4).T, engine=eng)
+
+	truth = asarray(fit_models(LR, X, y))
+	betas = FastLinearRegression().fit(X, y).betas.toarray()
+	assert allclose(truth, betas)
+
+	truth = asarray(fit_models(LR, X, y, fit_intercept=False))
+	betas = FastLinearRegression(fit_intercept=False).fit(X, y).betas.toarray()
 	assert allclose(truth, betas)
 
 
