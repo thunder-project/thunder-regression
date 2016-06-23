@@ -71,12 +71,6 @@ Fit the algorithm to data
 - `Y` collection of responses, dimensions `targets x samples`
 - returns a fitted `MassRegressionModel`
 
-#### `algorithm.fit_and_score(X, Y)`
-Fit the algorithm to data and also compute scores for goodness of fits
-- `X` design matrix, dimensions `samples x features`
-- `Y` collection of responses, dimensions `targets x samples`
-- returns array of scores and a fitted `MassRegressionModel`
-
 ### model
 
 The result of fitting an `algorithm` is a model with the following properties and methods:
