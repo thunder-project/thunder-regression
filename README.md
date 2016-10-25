@@ -71,12 +71,6 @@ Fit the algorithm to data
 - `Y` collection of responses, dimensions `targets x samples`
 - returns a fitted `MassRegressionModel`
 
-#### `algorithm.fit_and_score(X, Y)`
-Fit the algorithm to data and also compute scores for goodness of fits
-- `X` design matrix, dimensions `samples x features`
-- `Y` collection of responses, dimensions `targets x samples`
-- returns array of scores and a fitted `MassRegressionModel`
-
 ### model
 
 The result of fitting an `algorithm` is a model with the following properties and methods:
@@ -85,8 +79,11 @@ The result of fitting an `algorithm` is a model with the following properties an
 Array of regression coefficients, dimensions `targets x features`. If an intercept was fit, it will be the
 the first feature.
 
+#### `model.betas_and_scores`
+Array of regression coefficients, followed by prediction scores on the fitted data, dimensions `targets x (feature + 1)`. If an intercept was fit, it will be the the first feature.
+
 #### `model.models`
-Array of fitted models, dimensions `1 x targets`.
+Array of individual fitted models, dimensions `1 x targets`.
 
 #### `model.coef_`
 Array of coefficients, not including a possible intercept term, for consistency with [`scikit-learn`](https://github.com/scikit-learn/scikit-learn).
