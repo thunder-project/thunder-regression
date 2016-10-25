@@ -1,12 +1,12 @@
 # thunder-regression
 
 [![Latest Version](https://img.shields.io/pypi/v/thunder-regression.svg?style=flat-square)](https://pypi.python.org/pypi/thunder-registration)
-[![Build Status](https://img.shields.io/travis/thunder-project/thunder-regression/master.svg?style=flat-square)](https://travis-ci.org/thunder-project/thunder-regression) 
+[![Build Status](https://img.shields.io/travis/thunder-project/thunder-regression/master.svg?style=flat-square)](https://travis-ci.org/thunder-project/thunder-regression)
 
 
-> algorithms for mass univariate regression 
+> algorithms for mass univariate regression
 
-Mass univariate regression is the process of independently regressing multiple response variables against a single set of explantory features. It is common in any domain in which a lage number of response variables are measured, and fitting large collections of such models can benefit significantly from parallelization. 
+Mass univariate regression is the process of independently regressing multiple response variables against a single set of explantory features. It is common in any domain in which a lage number of response variables are measured, and fitting large collections of such models can benefit significantly from parallelization.
 
 This package provides a simple API for fitting these kinds of models. It provides a collection of `algorithms` for performing different types of mass regression, all following the [`scikit-learn`](https://github.com/scikit-learn/scikit-learn) style. It also supports providing custom algorithms directly from [`scikit-learn`](https://github.com/scikit-learn/scikit-learn). The `algorithms` are `fit` to data, returning a fitted `model` that contains regression coefficients and allows for `prediction` and `scoring` on new data. Compatible with Python 2.7+ and 3.4+. Works well alongside [`thunder`](https://github.com/thunder-project/thunder) and supprts parallelization via [`spark`](https://github.com/apache/spark), but can also be used as a standalone module on local [`numpy`](https://github.com/numpy/numpy) arrays.
 
@@ -82,7 +82,7 @@ Fit the algorithm to data and also compute scores for goodness of fits
 The result of fitting an `algorithm` is a model with the following properties and methods:
 
 #### `model.betas`
-Array of regression coefficients, dimensions `targets x features`. If an intercept was fit, it will be the 
+Array of regression coefficients, dimensions `targets x features`. If an intercept was fit, it will be the
 the first feature.
 
 #### `model.models`
@@ -129,14 +129,14 @@ Use a custom regression algorithm in a mass regression analysis. The provided `a
 This allows you to define an algorithm in [`scikit-learn`](https://github.com/scikit-learn/scikit-learn) and then wrap it for mass fitting, for example
 
 ```python
-from regression import CusomRegression
+from regression import CustomRegression
 from sklearn.linear_model import LassoCV
-algorithm = CusomRegression(LassoCV(normalize=True, fit_intercept=False))
+algorithm = CustomRegression(LassoCV(normalize=True, fit_intercept=False))
 model = algorithm.fit(X, Y)
 ```
 ## tests
 
-Run tests with 
+Run tests with
 
 ```bash
 py.test
