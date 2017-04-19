@@ -45,7 +45,9 @@ class MassRegressionModel:
                 raise ValueError("model is spark mode, input y must also be spark mode")
             joined = self.models.tordd().join(y.tordd())
             result = joined.mapValues(lambda v: array([v[0][0].score(X, v[1])]))
-            return fromrdd(result, shape=self.models.shape)
+            series = fromrdd(result, shape=self.models.shape)
+            series.values._ordered = False
+            return series
 
         if y.mode == "local":
             if not self.models.mode == "local":
@@ -64,7 +66,7 @@ class MassRegressionModel:
                 raise ValueError("model is spark mode, input y must also be spark mode")
             joined = self.models.tordd().join(y.tordd())
             both = fromrdd(joined.mapValues(lambda v: get_both(v[0][0], X, v[1])))
-
+            both.values._ordered = False
 
         if y.mode == "local":
             if not self.models.mode == "local":
