@@ -80,7 +80,7 @@ Array of regression coefficients, dimensions `targets x features`. If an interce
 the first feature.
 
 #### `model.betas_and_scores`
-Array of regression coefficients, followed by prediction scores on the fitted data, dimensions `targets x (feature + 1)`. If an intercept was fit, it will be the the first feature.
+Array of regression coefficients, followed by prediction scores on the fitted data, dimensions `targets x (feature + 1)`. If an intercept was fit, it will be the first feature.
 
 #### `model.models`
 Array of individual fitted models, dimensions `1 x targets`.
@@ -120,7 +120,7 @@ Linear regression through ordinary least squares as implemented in scikit-learn'
 #### `CustomRegression(algorithm)`
 Use a custom regression algorithm in a mass regression analysis. The provided `algorithm` should operate on single response variables, and must conform to the `scikit-learn` API as follows
 - Must implement a `.fit(X, Y)` method that takes a design matrix (`samples x features`) and a response vector and returns an object representing the fitted model.
-- The returned fitted model must must have attributes `.coef_` and `.intercept_` that hold the results of the the fit (`.coef_` having dimensions `1 x features` and `.intercept_` being a scalar).
+- The returned fitted model must have attributes `.coef_` and `.intercept_` that hold the results of the fit (`.coef_` having dimensions `1 x features` and `.intercept_` being a scalar).
 - The returned fitted model must also have methods `.predict(X)` and `.score(X, y)` (`X` having dimensions `new samples x features` and `y` having dimensions `1 x new samples`). The former should return a vector of predictions (dimensions `1 x new samples`) and the former should return a scalar score (likely r-squared).
 
 This allows you to define an algorithm in [`scikit-learn`](https://github.com/scikit-learn/scikit-learn) and then wrap it for mass fitting, for example
